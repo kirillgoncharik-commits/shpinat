@@ -1,7 +1,7 @@
 'use strict';
-// Set this to the verified measurement ID of the shpinat.club GA4 web stream.
-// Until it is supplied, Google Analytics is inactive and no Google tag is loaded.
+// Verified GA4 web stream for https://shpinat.club/ (property 560987832).
+// The Google tag loads only on an allowed host after visitor consent.
 window.SHPINAT_CONFIG = Object.freeze({
-  ga4MeasurementId: '',
+  ga4MeasurementId: 'G-F6FZB994ZD',
   analyticsHosts: ['shpinat.club', 'www.shpinat.club']
 });
