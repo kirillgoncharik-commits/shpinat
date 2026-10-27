@@ -20,7 +20,7 @@
 
 - Ветка: `main`.
 - Framework preset: None.
-- Build command: оставить пустым.
+- Build command: `exit 0`.
 - Build output directory: `public`.
 - Custom domain: `shpinat.club`.
 
@@ -37,3 +37,10 @@ GA4-код готов, но `ga4MeasurementId` оставлен пустым д�
 Основной домен допускает индексирование. Временные адреса pages.dev получают `X-Robots-Tag: noindex, nofollow`. Sitemap содержит главную и страницу программы.
 
 Все кнопки записи ведут на https://calendly.com/kirillgoncharik/30min.
+
+## Проверка перед публикацией
+
+```sh
+python3 scripts/validate_site.py
+node --check public/analytics.js
+```
