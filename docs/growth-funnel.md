@@ -77,7 +77,7 @@ Production Turnstile допускает `shpinat.club` и его поддоме�
 
 ## Публикация и проверки
 
-Сайт остаётся в существующем Pages-проекте. Не загружать `public/` через Dashboard: он не компилирует Pages Functions. Использовать Wrangler `pages deploy public --project-name shpinat-pilot --branch main --commit-hash <SHA>` из чистого checkout опубликованного commit. Перед этим применить D1 migration и опубликовать закрытый Worker. Его секреты сохраняются при обновлении кода. `MAILER` должен быть ограничен реальным подтверждённым получателем; не публиковать его адрес в клиентском коде.
+Сайт остаётся в существующем Pages-проекте. Не загружать `public/` через Dashboard: он не компилирует Pages Functions. Использовать Wrangler `pages deploy public --project-name shpinat-pilot --branch main --commit-hash <SHA>` из чистого checkout опубликованного commit. Перед этим применить D1 migrations. Для Worker использовать `scripts/deploy_worker.py` с переменными `WRANGLER_BIN` (путь к установленному Wrangler) и `LEAD_NOTIFICATION_EMAIL` (подтверждённый получатель): helper ограничивает MAILER этим адресом, не сохраняя адрес в репозитории. Его секреты сохраняются при обновлении кода. `MAILER` должен быть ограничен реальным подтверждённым получателем; не публиковать его адрес в клиентском коде.
 
 Локально: `npm test`, `npm run check`. Backend tests используют настоящий SQLite с schema migration и проверяют поля, согласие, origin, защиту, сохранение источника, доставку, повтор, сбой доставки и лимиты. HTML validator проверяет локальные ссылки/якоря, изображения и sitemap. Финальное доказательство — отдельный production readback и реальные письма обеих форм.
 
