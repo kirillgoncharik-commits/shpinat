@@ -24,4 +24,4 @@ config += '\ndestination_address = ' + json.dumps(recipient) + '\n'
 with tempfile.TemporaryDirectory(prefix='shpinat-deploy-') as directory:
     target = Path(directory) / 'wrangler.toml'
     target.write_text(config)
-    subprocess.run(['node', wrangler, 'deploy', '--config', str(target)], cwd=root, check=True)
+    subprocess.run(['node', wrangler, 'deploy', '--config', str(target), '--keep-vars'], cwd=root, check=True)

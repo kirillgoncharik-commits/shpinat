@@ -21,12 +21,27 @@ test('valid application preserves first attribution while stripping unrelated UR
   assert.equal(lead.page_url, 'https://shpinat.club/apply/');
   assert.equal(lead.consent_version, '2026-11-01');
 });
-test('application requires all required fields, honest stage and consent', () => {
-  for (const key of ['name','email','contact','location','occupation','problem','result','heard_from','commitment','stage']) {
+test('short application requires name, a single contact, task and consent', () => {
+  for (const key of ['name','problem']) {
     const p = payload(); p.fields[key] = ''; assert.throws(() => validate(p), undefined, key);
   }
+  const empty = payload(); empty.fields.email = ''; empty.fields.contact = ''; assert.throws(() => validate(empty));
   const p = payload(); p.fields.consent = 'true'; assert.throws(() => validate(p));
   p.fields.consent = true; p.fields.stage = 'invalid'; assert.throws(() => validate(p));
+});
+test('minimal application accepts email or messenger and delivers with correct Reply-To', async () => {
+  for (const contact of ['qa@example.org', 'Telegram: @test']) {
+    const { env, db } = setup(); const p = payload();
+    p.fields = { name: 'Тест', contact, problem: 'Хочу проверить идею', consent: true };
+    const r = await handle(request(p), env, async message => {
+      assert.equal(message.replyTo, contact.includes('@example.org') ? contact : '');
+      assert.match(message.text, /Хочу проверить идею/);
+    }, verify());
+    assert.equal(r.status, 200);
+    const row = db.prepare('SELECT * FROM leads').get();
+    assert.equal(row.notification_status, 'sent');
+    assert.equal(row.email || row.contact, contact);
+  }
 });
 test('question accepts either email or a different contact and requires a message', () => {
   const p = payload('contact'); p.fields.name = ''; p.fields.email = ''; assert.equal(validate(p).fields.contact, '@test');

@@ -32,8 +32,15 @@ export function validate(payload) {
   if (fields.email && !emailPattern.test(fields.email)) throw new Error('Проверь email.');
   if (/[\r\n]/.test(fields.email)) throw new Error('Проверь email.');
   if (payload.kind === 'application') {
-    for (const key of ['name', 'email', 'contact', 'location', 'occupation', 'problem', 'result', 'heard_from']) if (!fields[key]) throw new Error('Заполни обязательные поля.');
-    if (!stages.includes(fields.stage) || !['yes', 'discuss'].includes(fields.commitment)) throw new Error('Выбери стадию и готовность участвовать.');
+    if (!fields.name || !fields.problem) throw new Error('Укажи имя и коротко опиши задачу.');
+    if (!fields.email && !fields.contact) throw new Error('Укажи email или другой контакт.');
+    // One contact is enough; recognize email for notification Reply-To.
+    if (!fields.email && emailPattern.test(fields.contact)) {
+      fields.email = fields.contact;
+      fields.contact = '';
+    }
+    if (fields.stage && !stages.includes(fields.stage)) throw new Error('Проверь стадию проекта.');
+    if (fields.commitment && !['yes', 'discuss'].includes(fields.commitment)) throw new Error('Проверь готовность участвовать.');
   } else {
     if (!fields.email && !fields.contact) throw new Error('Укажи email или другой контакт.');
     if (!topics.includes(fields.topic) || !fields.message) throw new Error('Выбери тему и напиши сообщение.');

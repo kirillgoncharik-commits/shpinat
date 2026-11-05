@@ -101,7 +101,8 @@
     const email = form.elements.namedItem('email');
     const contact = form.elements.namedItem('contact');
     const validateContact = () => {
-      if (kind === 'contact') email.setCustomValidity(email.value.trim() || contact.value.trim() ? '' : 'Укажи email или другой контакт, чтобы мы могли ответить.');
+      const control = email || contact;
+      control?.setCustomValidity(email?.value.trim() || contact?.value.trim() ? '' : 'Укажи email или другой контакт, чтобы мы могли ответить.');
     };
     [email, contact].forEach(input => input?.addEventListener('input', validateContact));
     form.addEventListener('submit', async event => {

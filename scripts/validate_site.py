@@ -75,7 +75,7 @@ for path, page in pages.items():
         if url.fragment and target.suffix == ".html":
             assert unquote(url.fragment) in pages[target.resolve()].ids, (path, link, "missing anchor")
 
-images = list((ROOT / "assets").glob("*.webp")) + list((ROOT / "assets").glob("*.png"))
+images = list((ROOT / "assets").rglob("*.webp")) + list((ROOT / "assets").rglob("*.png"))
 for path in images:
     data = path.read_bytes()
     if path.suffix == ".webp":
