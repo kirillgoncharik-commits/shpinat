@@ -74,6 +74,7 @@
     let started = false;
     let widget;
     let turnstile;
+    const compactProtection = window.matchMedia('(max-width: 600px)');
     let requestId = crypto.randomUUID();
     form.addEventListener('focusin', event => {
       if (!started && event.target.matches('input,textarea,select') && !event.target.closest('[data-antispam]')) {
@@ -84,15 +85,22 @@
     configuration.then(async config => {
       if (!config.ready) throw new Error('Форма временно недоступна. Напиши нам напрямую или выбери время знакомства.');
       turnstile = await loadTurnstile();
-      widget = turnstile.render(form.querySelector('[data-antispam]'), {
+      const widgetOptions = {
         sitekey: config.turnstileSiteKey,
         action: kind,
         theme: 'light',
-        size: 'flexible',
+        size: compactProtection.matches ? 'compact' : 'flexible',
         callback: () => { notice.textContent = ''; },
         'error-callback': () => { notice.textContent = 'Проверка защиты не загрузилась. Попробуй обновить страницу или напиши нам напрямую.'; },
         'expired-callback': () => turnstile.reset(widget)
-      });
+      };
+      const renderProtection = () => {
+        if (widget !== undefined) turnstile.remove(widget);
+        widgetOptions.size = compactProtection.matches ? 'compact' : 'flexible';
+        widget = turnstile.render(form.querySelector('[data-antispam]'), widgetOptions);
+      };
+      renderProtection();
+      compactProtection.addEventListener('change', renderProtection);
       controls.disabled = false;
       button.disabled = false;
       notice.textContent = '';
