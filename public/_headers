@@ -12,3 +12,6 @@ https://:version.:project.pages.dev/*
 
 /404.html
   X-Robots-Tag: noindex, follow
+
+/analytics.js
+  Cache-Control: no-cache
