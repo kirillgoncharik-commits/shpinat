@@ -55,7 +55,7 @@ for path in ROOT.rglob("*.html"):
         route = '/' + str(path.parent.relative_to(ROOT)).strip('.')
         route = route.rstrip('/') + '/'
         assert page.canonicals == ['https://shpinat.club' + route], (path, 'canonical')
-        assert 'noindex' not in page.meta.get('robots', ''), (path, 'noindex')
+        assert ('noindex' in page.meta.get('robots', '')) == (route == '/privacy/'), (path, 'indexing policy')
         for key in ['description', 'og:title', 'og:description', 'og:url', 'og:image', 'twitter:card', 'twitter:title', 'twitter:description', 'twitter:image']:
             assert page.meta.get(key), (path, key)
         types = {item['@type'] for schema in page.schemas for item in schema.get('@graph', [])}
