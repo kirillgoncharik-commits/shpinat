@@ -31,7 +31,7 @@
       cookie_flags: 'SameSite=Lax;Secure',
       page_location: window.SHPINAT_FUNNEL?.safeURL(location.href) || location.origin + location.pathname,
       page_referrer: window.SHPINAT_FUNNEL?.properties().referrer || '',
-      ignore_referrer: true
+      ...(new URLSearchParams(location.search).get('codex_test') === 'seo_20261107' ? { debug_mode: true, test_run: 'seo_20261107' } : {})
     });
     const tag = document.createElement('script');
     tag.async = true;
@@ -78,8 +78,9 @@
   const events = new Set(['primary_cta_click', 'application_start', 'application_submit', 'contact_form_start', 'contact_form_submit', 'email_click', 'calendly_click']);
   document.addEventListener('shpinat:event', event => {
     if (choice !== 'granted' || !loaded || !events.has(event.detail?.name)) return;
-    window.gtag('event', event.detail.name, { ...event.detail.properties, transport_type: 'beacon' });
+    const context = { site: 'shpinat.club', language: document.documentElement.lang || 'ru', page_type: location.pathname === '/' ? 'home' : location.pathname.split('/').filter(Boolean)[0] };
+    window.gtag('event', event.detail.name, { ...context, ...event.detail.properties, transport_type: 'beacon' });
     // Keep the previous baseline; a click never means a completed booking.
-    if (event.detail.name === 'calendly_click') window.gtag('event', 'booking_click', { ...event.detail.properties, placement: event.detail.properties.cta_location, transport_type: 'beacon' });
+    if (event.detail.name === 'calendly_click') window.gtag('event', 'booking_click', { ...context, ...event.detail.properties, placement: event.detail.properties.cta_location, transport_type: 'beacon' });
   });
 })();
