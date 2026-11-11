@@ -1,9 +1,0 @@
-{
-  "name": "shpinat",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "test": "node --test tests/*.test.js",
-    "check": "python3 scripts/validate_site.py && node --check public/funnel.js && node --check public/analytics.js && node --check worker/handler.js"
-  }
-}
