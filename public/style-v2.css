@@ -24,3 +24,36 @@
 @media(max-width:820px){.short-apply .application-panel,.apply-info{grid-column:auto;grid-row:auto}.apply-info{margin-top:0}.short-apply .application-panel{margin-top:0}.short-apply .apply-intro .text-link{margin-bottom:5px}}
 .conditions-section .section-heading.split .price{font-size:78px;line-height:1;letter-spacing:-.07em;color:var(--forest);margin-bottom:20px}
 @media(max-width:600px){.conditions-section .section-heading.split .price{font-size:64px}}
+
+.community-hero h1 {
+  font-size: clamp(36px, 4.6vw, 70px);
+}
+
+.community-boat {
+  margin: 0;
+  min-width: 0;
+}
+
+.community-boat img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 20px;
+}
+
+.community-boat figcaption {
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+  .community-hero h1 {
+    font-size: clamp(34px, 9vw, 52px);
+  }
+
+  .community-boat img {
+    border-radius: 14px;
+  }
+}
